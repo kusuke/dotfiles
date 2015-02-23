@@ -1,4 +1,5 @@
 "カラースキーマ
+highlight Visual guibg=#0077B2
 :colorscheme hybrid
 
 "初期ディレクトリ
