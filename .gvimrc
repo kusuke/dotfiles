@@ -21,7 +21,7 @@ call submode#map('bufmove', 'n', '', '-', '<C-w>-')
 
 
 " Rictyフォントできたら
-"set guifont=Inconsolata_for_Powerline:h12:cANSI
+set guifont=Inconsolata_for_Powerline:h12:cANSI
 
 " フォント
 "set guifont=Ricty:h12

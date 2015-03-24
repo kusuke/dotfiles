@@ -173,6 +173,49 @@ nnoremap sb :<C-u>Unite buffer_tab -buffer-name=file<CR>
 nnoremap sB :<C-u>Unite buffer -buffer-name=file<CR>
 """"""""""""""""""""""""""""""
 
+"ここから
+
+let s:is_windows =  has('win16') || has('win32') || has('win64')
+let s:is_cygwin  =  has('win32unix')
+let s:is_cui     = !has('gui_running')
+
+if s:is_cygwin
+  if &term =~# '^xterm' && &t_Co < 256
+    set t_Co=256  " Extend terminal color of xterm
+  endif
+  if &term !=# 'cygwin'  " not in command prompt
+    " Change cursor shape depending on mode
+    let &t_ti .= "\e[1 q"
+    let &t_SI .= "\e[5 q"
+    let &t_EI .= "\e[1 q"
+    let &t_te .= "\e[0 q"
+  endif
+endif
+
+if &t_Co >= 16
+  NeoBundle 'bling/vim-airline'
+elseif
+  set laststatus=2
+  set statusline=%<%f\ %h%m%r%=%-14.(%l,%c%V%)\ %P
+  NeoBundle 'molok/vim-smartusline'
+endif
+
+if !s:is_windows && s:is_cui
+  for s:ch in map(
+        \   range(char2nr('a'), char2nr('z'))
+        \ + range(char2nr('A'), char2nr('N'))
+        \ + range(char2nr('P'), char2nr('Z'))
+        \ + range(char2nr('0'), char2nr('9'))
+        \ , 'nr2char(v:val)')
+    exec 'nmap <ESC>' . s:ch '<M-' . s:ch . '>'
+  endfor
+  unlet s:ch
+  map  <NUL>  <C-Space>
+  map! <NUL>  <C-Space>
+endif
+
+"ここまで
+
 set modifiable
 set write
 
@@ -198,6 +241,8 @@ call neobundle#end()
 
 " Required:
 filetype plugin indent on
+
+set guifont=Inconsolata_for_Powerline:h12:cANSI
 
 " 未インストールのプラグインがある場合、インストールするかどうかを尋ねてくれるようにする設定
 " 毎回聞かれると邪魔な場合もあるので、この設定は任意です。
